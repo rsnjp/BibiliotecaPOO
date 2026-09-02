@@ -25,17 +25,6 @@ SistemaBiblioteca/
 5. Abra `src/biblioteca/App.java`.
 6. Clique no botão **Run** que aparece acima do método `main`, ou pressione **F5**.
 
-## Pré-requisito
-
-Você precisa ter o **JDK** (Java Development Kit) instalado, versão 17 ou superior.
-Para verificar, abra um terminal e digite:
-
-```
-java -version
-```
-
-Se não estiver instalado, baixe em: https://adoptium.net
-
 ## Observação
 
 Os métodos de negócio (`cadastrarLivro`, `registrarEmprestimo`, `cancelarReserva`, etc.)
