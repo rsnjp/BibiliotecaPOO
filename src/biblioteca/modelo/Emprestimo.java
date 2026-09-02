@@ -5,21 +5,17 @@ import java.util.Date;
 
 public class Emprestimo {
 
-    // Formato usado para gravar/ler datas no arquivo CSV.
     private static final SimpleDateFormat FORMATO_DATA = new SimpleDateFormat("dd/MM/yyyy");
 
-    // Atributos
     private int idEmprestimo;
     private Date dataEmprestimo;
     private Date dataDevolucaoPrevista;
     private Date dataDevolucaoEfetiva;
     private String status;
 
-    // Relacionamentos: um empréstimo pertence a 1 Usuario e é para 1 Livro
     private Usuario usuario;
     private Livro livro;
 
-    // Construtor
     public Emprestimo(int idEmprestimo, Date dataEmprestimo, Date dataDevolucaoPrevista,
                        String status, Usuario usuario, Livro livro) {
         this.idEmprestimo = idEmprestimo;
@@ -30,7 +26,7 @@ public class Emprestimo {
         this.livro = livro;
     }
 
-    // Métodos da UML
+    // Devolução: encerra o empréstimo e libera o livro automaticamente.
     public void registrarDevolucao() {
         this.dataDevolucaoEfetiva = new Date();
         this.status = "Concluído";
@@ -43,7 +39,6 @@ public class Emprestimo {
         // TODO: implementar regra de renovação (ex.: +7 dias na dataDevolucaoPrevista)
     }
 
-    // Getters e Setters
     public int getIdEmprestimo() {
         return idEmprestimo;
     }
@@ -105,12 +100,8 @@ public class Emprestimo {
         return "Empréstimo #" + idEmprestimo + " - " + livro.getTitulo() + " para " + usuario.getNome();
     }
 
-    // Converte o objeto para uma linha de texto no formato CSV.
-    // Datas nulas (ex.: devolução ainda não ocorreu) são gravadas como
-    // string vazia, e reconstruídas como null na leitura.
-    // Em vez de gravar o objeto Usuario/Livro inteiro, gravamos apenas o
-    // seu id: na leitura, o ManipuladorArquivos usa esse id para religar
-    // o Emprestimo ao objeto Usuario/Livro já existente em memória.
+    // Grava só os ids de usuário/livro (não o objeto inteiro); a leitura
+    // usa esses ids para religar o Emprestimo ao objeto já existente em memória.
     // Formato: idEmprestimo;dataEmprestimo;dataDevolucaoPrevista;dataDevolucaoEfetiva;status;idUsuario;idLivro
     public String toCSV() {
         String dtEmprestimo = dataEmprestimo != null ? FORMATO_DATA.format(dataEmprestimo) : "";

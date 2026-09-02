@@ -5,19 +5,15 @@ import java.util.Date;
 
 public class Reserva {
 
-    // Formato usado para gravar/ler datas no arquivo CSV.
     private static final SimpleDateFormat FORMATO_DATA = new SimpleDateFormat("dd/MM/yyyy");
 
-    // Atributos
     private int idReserva;
     private Date dataReserva;
     private String status;
 
-    // Relacionamentos: uma reserva é feita por 1 Usuario e reserva 1 Livro
     private Usuario usuario;
     private Livro livro;
 
-    // Construtor
     public Reserva(int idReserva, Date dataReserva, String status, Usuario usuario, Livro livro) {
         this.idReserva = idReserva;
         this.dataReserva = dataReserva;
@@ -26,7 +22,6 @@ public class Reserva {
         this.livro = livro;
     }
 
-    // Métodos da UML
     public void cancelarReserva() {
         this.status = "Cancelada";
     }
@@ -35,7 +30,6 @@ public class Reserva {
         this.status = "Concluída";
     }
 
-    // Getters e Setters
     public int getIdReserva() {
         return idReserva;
     }
@@ -81,9 +75,8 @@ public class Reserva {
         return "Reserva #" + idReserva + " - " + livro.getTitulo() + " para " + usuario.getNome();
     }
 
-    // Converte o objeto para uma linha de texto no formato CSV.
-    // Assim como em Emprestimo, gravamos apenas o id do Usuario e do
-    // Livro (não o objeto inteiro), para religar as referências na leitura.
+    // Assim como em Emprestimo, grava apenas o id de usuário/livro para
+    // religar as referências na leitura.
     // Formato: idReserva;dataReserva;status;idUsuario;idLivro
     public String toCSV() {
         String dtReserva = dataReserva != null ? FORMATO_DATA.format(dataReserva) : "";

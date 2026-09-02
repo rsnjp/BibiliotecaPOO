@@ -2,13 +2,11 @@ package biblioteca.modelo;
 
 public class Livro {
 
-    // Atributos
     private int idLivro;
     private String titulo;
     private String autor;
     private String status;
 
-    // Construtor
     public Livro(int idLivro, String titulo, String autor, String status) {
         this.idLivro = idLivro;
         this.titulo = titulo;
@@ -16,7 +14,6 @@ public class Livro {
         this.status = status;
     }
 
-    // Métodos da UML
     public void atualizarStatus(String status) {
         this.status = status;
     }
@@ -25,7 +22,6 @@ public class Livro {
         return "Disponível".equalsIgnoreCase(this.status);
     }
 
-    // Getters e Setters
     public int getIdLivro() {
         return idLivro;
     }
@@ -63,9 +59,6 @@ public class Livro {
         return titulo + " (" + status + ")";
     }
 
-    // Converte o objeto para uma linha de texto no formato CSV,
-    // usando ";" como separador (evita conflito com vírgulas que
-    // possam existir no título ou no nome do autor).
     // Formato: idLivro;titulo;autor;status
     public String toCSV() {
         return idLivro + ";" + titulo + ";" + autor + ";" + status;
