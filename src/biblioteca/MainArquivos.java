@@ -1,5 +1,11 @@
 package biblioteca;
 
+import biblioteca.modelo.Bibliotecaria;
+import biblioteca.modelo.Emprestimo;
+import biblioteca.modelo.Livro;
+import biblioteca.modelo.Reserva;
+import biblioteca.modelo.Usuario;
+
 import java.util.Date;
 
 /**
