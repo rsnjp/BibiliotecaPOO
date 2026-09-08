@@ -12,11 +12,7 @@ import java.awt.*;
 
 public class MenuBibliotecaria extends JFrame {
 
-    private final String idBibliotecaria;
-
     public MenuBibliotecaria(String idBibliotecaria) {
-        this.idBibliotecaria = idBibliotecaria;
-
         setTitle("Menu - Bibliotecária " + idBibliotecaria);
         setSize(400, 450);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

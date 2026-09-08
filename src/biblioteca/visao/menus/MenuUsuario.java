@@ -9,11 +9,7 @@ import java.awt.*;
 
 public class MenuUsuario extends JFrame {
 
-    private final int idUsuario;
-
     public MenuUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
-
         setTitle("Menu - Usuário " + idUsuario);
         setSize(400, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
