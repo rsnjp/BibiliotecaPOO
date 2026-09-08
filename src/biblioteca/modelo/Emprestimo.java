@@ -1,5 +1,7 @@
 package biblioteca.modelo;
 
+import biblioteca.util.ManipuladorArquivos;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -8,28 +10,30 @@ public class Emprestimo {
     private static final SimpleDateFormat FORMATO_DATA = new SimpleDateFormat("dd/MM/yyyy");
 
     private int idEmprestimo;
+    private int idUsuario;
+    private int idLivro;
     private Date dataEmprestimo;
     private Date dataDevolucaoPrevista;
     private Date dataDevolucaoEfetiva;
     private String status;
 
-    private Usuario usuario;
-    private Livro livro;
-
-    public Emprestimo(int idEmprestimo, Date dataEmprestimo, Date dataDevolucaoPrevista,
-                       String status, Usuario usuario, Livro livro) {
+    public Emprestimo(int idEmprestimo, int idUsuario, int idLivro, Date dataEmprestimo,
+                       Date dataDevolucaoPrevista, String status) {
         this.idEmprestimo = idEmprestimo;
+        this.idUsuario = idUsuario;
+        this.idLivro = idLivro;
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucaoPrevista = dataDevolucaoPrevista;
         this.status = status;
-        this.usuario = usuario;
-        this.livro = livro;
     }
 
-    // Devolução: encerra o empréstimo e libera o livro automaticamente.
+    // Encerra o empréstimo, grava a mudança e libera o livro automaticamente.
     public void registrarDevolucao() {
         this.dataDevolucaoEfetiva = new Date();
         this.status = "Concluído";
+        ManipuladorArquivos.atualizarObjeto("Emprestimo", idEmprestimo, this, 7);
+
+        Livro livro = ManipuladorArquivos.buscarLivroPorId(idLivro);
         if (livro != null) {
             livro.atualizarStatus("Disponível");
         }
@@ -45,6 +49,22 @@ public class Emprestimo {
 
     public void setIdEmprestimo(int idEmprestimo) {
         this.idEmprestimo = idEmprestimo;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public int getIdLivro() {
+        return idLivro;
+    }
+
+    public void setIdLivro(int idLivro) {
+        this.idLivro = idLivro;
     }
 
     public Date getDataEmprestimo() {
@@ -79,29 +99,13 @@ public class Emprestimo {
         this.status = status;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Livro getLivro() {
-        return livro;
-    }
-
-    public void setLivro(Livro livro) {
-        this.livro = livro;
-    }
-
     @Override
     public String toString() {
-        return "Empréstimo #" + idEmprestimo + " - " + livro.getTitulo() + " para " + usuario.getNome();
+        return "Empréstimo #" + idEmprestimo + " - Livro " + idLivro + " - Usuário " + idUsuario + " (" + status + ")";
     }
 
     // Grava só os ids de usuário/livro (não o objeto inteiro); a leitura
-    // usa esses ids para religar o Emprestimo ao objeto já existente em memória.
+    // resolve esses ids para o Livro/Usuario correspondente quando precisa.
     // Formato: idEmprestimo;dataEmprestimo;dataDevolucaoPrevista;dataDevolucaoEfetiva;status;idUsuario;idLivro
     public String toCSV() {
         String dtEmprestimo = dataEmprestimo != null ? FORMATO_DATA.format(dataEmprestimo) : "";
@@ -109,6 +113,6 @@ public class Emprestimo {
         String dtEfetiva = dataDevolucaoEfetiva != null ? FORMATO_DATA.format(dataDevolucaoEfetiva) : "";
 
         return idEmprestimo + ";" + dtEmprestimo + ";" + dtPrevista + ";" + dtEfetiva + ";"
-                + status + ";" + usuario.getIdUsuario() + ";" + livro.getIdLivro();
+                + status + ";" + idUsuario + ";" + idLivro;
     }
 }

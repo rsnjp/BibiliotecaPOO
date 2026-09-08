@@ -1,5 +1,7 @@
 package biblioteca.modelo;
 
+import biblioteca.util.ManipuladorArquivos;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +11,6 @@ public class Usuario {
     private String nome;
     private String telefone;
     private String email;
-
-    // Não guarda a própria lista de empréstimos/reservas: filtra a lista
-    // mestre recebida por parâmetro, evitando duas cópias desincronizadas.
 
     public Usuario(int idUsuario, String nome, String telefone, String email) {
         this.idUsuario = idUsuario;
@@ -23,26 +22,38 @@ public class Usuario {
     public void atualizarContato(String telefone, String email) {
         this.telefone = telefone;
         this.email = email;
+        ManipuladorArquivos.atualizarObjeto("Usuario", idUsuario, this, 4);
     }
 
-    public List<Emprestimo> listarEmprestimos(List<Emprestimo> todosEmprestimos) {
-        List<Emprestimo> resultado = new ArrayList<>();
-        for (Emprestimo e : todosEmprestimos) {
-            if (e.getUsuario() == this) {
-                resultado.add(e);
+    public List<Emprestimo> listarEmprestimos() {
+        List<Emprestimo> meus = new ArrayList<>();
+        for (Emprestimo e : ManipuladorArquivos.lerEmprestimos()) {
+            if (e.getIdUsuario() == idUsuario) {
+                meus.add(e);
             }
         }
-        return resultado;
+        return meus;
     }
 
-    public List<Reserva> listarReservas(List<Reserva> todasReservas) {
-        List<Reserva> resultado = new ArrayList<>();
-        for (Reserva r : todasReservas) {
-            if (r.getUsuario() == this) {
-                resultado.add(r);
+    public List<Reserva> listarReservas() {
+        List<Reserva> minhas = new ArrayList<>();
+        for (Reserva r : ManipuladorArquivos.lerReservas()) {
+            if (r.getIdUsuario() == idUsuario) {
+                minhas.add(r);
             }
         }
-        return resultado;
+        return minhas;
+    }
+
+    // Só cancela reservas do próprio usuário.
+    public boolean cancelarReserva(int idReserva) {
+        for (Reserva r : ManipuladorArquivos.lerReservas()) {
+            if (r.getIdReserva() == idReserva && r.getIdUsuario() == idUsuario) {
+                r.cancelarReserva();
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getIdUsuario() {
@@ -79,12 +90,7 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario{" +
-                "idUsuario=" + idUsuario +
-                ", nome='" + nome + '\'' +
-                ", telefone='" + telefone + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return idUsuario + " - " + nome;
     }
 
     // Formato: idUsuario;nome;telefone;email

@@ -1,5 +1,7 @@
 package biblioteca.modelo;
 
+import biblioteca.util.ManipuladorArquivos;
+
 public class Livro {
 
     private int idLivro;
@@ -14,8 +16,10 @@ public class Livro {
         this.status = status;
     }
 
+    // Muda o status e já regrava a linha correspondente no arquivo.
     public void atualizarStatus(String status) {
         this.status = status;
+        ManipuladorArquivos.atualizarObjeto("Livro", idLivro, this, 4);
     }
 
     public boolean consultarDisponibilidade() {
@@ -56,7 +60,7 @@ public class Livro {
 
     @Override
     public String toString() {
-        return titulo + " (" + status + ")";
+        return idLivro + " - " + titulo + " (" + status + ")";
     }
 
     // Formato: idLivro;titulo;autor;status

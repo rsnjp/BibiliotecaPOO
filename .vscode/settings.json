@@ -1,0 +1,9 @@
+{
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-24",
+            "path": "C:\\Users\\Pedro\\.jdks\\openjdk-24.0.2+12-54",
+            "default": true
+        }
+    ]
+}

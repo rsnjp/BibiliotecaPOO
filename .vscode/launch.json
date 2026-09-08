@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "biblioteca.Main",
+      "projectName": "BibiliotecaPOO_a3154080"
+    },
+    {
+      "type": "java",
+      "name": "Sistema Biblioteca",
+      "request": "launch",
+      "mainClass": "biblioteca.Main",
+      "projectName": "BibiliotecaPOO"
+    }
+  ]
+}

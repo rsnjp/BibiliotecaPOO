@@ -1,7 +1,6 @@
 package biblioteca.modelo;
 
-import java.util.Date;
-import java.util.List;
+import biblioteca.util.ManipuladorArquivos;
 
 public class Bibliotecaria {
 
@@ -16,36 +15,32 @@ public class Bibliotecaria {
     }
 
     // Cadastro de livros e usuários
-    public void cadastrarLivro(List<Livro> livros, Livro livro) {
-        livros.add(livro);
+    public void cadastrarLivro(Livro livro) {
+        ManipuladorArquivos.salvarObjeto("Livro", livro);
     }
 
-    public void cadastrarUsuario(List<Usuario> usuarios, Usuario usuario) {
-        usuarios.add(usuario);
+    public void cadastrarUsuario(Usuario usuario) {
+        ManipuladorArquivos.salvarObjeto("Usuario", usuario);
     }
 
     // Empréstimos
-    public Emprestimo registrarEmprestimo(List<Emprestimo> emprestimos, Usuario usuario, Livro livro, Date dataEmprestimo) {
-        Emprestimo emprestimo = new Emprestimo(emprestimos.size() + 1, dataEmprestimo, null, "Ativo", usuario, livro);
-        emprestimos.add(emprestimo);
-        livro.atualizarStatus("Emprestado");
-        return emprestimo;
+    public void registrarEmprestimo(Emprestimo emprestimo) {
+        ManipuladorArquivos.salvarObjeto("Emprestimo", emprestimo);
     }
 
-    public void registrarDevolucao(List<Emprestimo> emprestimos, int idEmprestimo) {
-        for (Emprestimo e : emprestimos) {
+    public boolean registrarDevolucao(int idEmprestimo) {
+        for (Emprestimo e : ManipuladorArquivos.lerEmprestimos()) {
             if (e.getIdEmprestimo() == idEmprestimo) {
                 e.registrarDevolucao();
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     // Reservas
-    public Reserva registrarReserva(List<Reserva> reservas, Usuario usuario, Livro livro) {
-        Reserva reserva = new Reserva(reservas.size() + 1, new Date(), "Ativa", usuario, livro);
-        reservas.add(reserva);
-        return reserva;
+    public void registrarReserva(Reserva reserva) {
+        ManipuladorArquivos.salvarObjeto("Reserva", reserva);
     }
 
     public String getIdBibliotecaria() {
@@ -74,11 +69,7 @@ public class Bibliotecaria {
 
     @Override
     public String toString() {
-        return "Bibliotecaria{" +
-                "idBibliotecaria='" + idBibliotecaria + '\'' +
-                ", nome='" + nome + '\'' +
-                ", turno='" + turno + '\'' +
-                '}';
+        return idBibliotecaria + " - " + nome;
     }
 
     // Formato: idBibliotecaria;nome;turno

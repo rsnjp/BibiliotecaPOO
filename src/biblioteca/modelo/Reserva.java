@@ -1,5 +1,7 @@
 package biblioteca.modelo;
 
+import biblioteca.util.ManipuladorArquivos;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -10,24 +12,25 @@ public class Reserva {
     private int idReserva;
     private Date dataReserva;
     private String status;
+    private int idUsuario;
+    private int idLivro;
 
-    private Usuario usuario;
-    private Livro livro;
-
-    public Reserva(int idReserva, Date dataReserva, String status, Usuario usuario, Livro livro) {
+    public Reserva(int idReserva, Date dataReserva, String status, int idUsuario, int idLivro) {
         this.idReserva = idReserva;
         this.dataReserva = dataReserva;
         this.status = status;
-        this.usuario = usuario;
-        this.livro = livro;
+        this.idUsuario = idUsuario;
+        this.idLivro = idLivro;
     }
 
     public void cancelarReserva() {
         this.status = "Cancelada";
+        ManipuladorArquivos.atualizarObjeto("Reserva", idReserva, this, 5);
     }
 
     public void concluirReserva() {
         this.status = "Concluída";
+        ManipuladorArquivos.atualizarObjeto("Reserva", idReserva, this, 5);
     }
 
     public int getIdReserva() {
@@ -54,33 +57,31 @@ public class Reserva {
         this.status = status;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public Livro getLivro() {
-        return livro;
+    public int getIdLivro() {
+        return idLivro;
     }
 
-    public void setLivro(Livro livro) {
-        this.livro = livro;
+    public void setIdLivro(int idLivro) {
+        this.idLivro = idLivro;
     }
 
     @Override
     public String toString() {
-        return "Reserva #" + idReserva + " - " + livro.getTitulo() + " para " + usuario.getNome();
+        return "Reserva #" + idReserva + " - Livro " + idLivro + " - Usuário " + idUsuario + " (" + status + ")";
     }
 
-    // Assim como em Emprestimo, grava apenas o id de usuário/livro para
-    // religar as referências na leitura.
+    // Assim como em Emprestimo, grava apenas o id de usuário/livro.
     // Formato: idReserva;dataReserva;status;idUsuario;idLivro
     public String toCSV() {
         String dtReserva = dataReserva != null ? FORMATO_DATA.format(dataReserva) : "";
-        return idReserva + ";" + dtReserva + ";" + status + ";"
-                + usuario.getIdUsuario() + ";" + livro.getIdLivro();
+        return idReserva + ";" + dtReserva + ";" + status + ";" + idUsuario + ";" + idLivro;
     }
 }
