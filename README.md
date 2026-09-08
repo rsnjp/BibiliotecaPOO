@@ -81,6 +81,7 @@ Se não estiver instalado, baixe em: https://adoptium.net
 
 O arquivo `.vscode/settings.json` já aponta para uma instalação de JDK 24 detectada
 neste ambiente; ajuste o caminho se a sua máquina tiver o JDK em outro lugar.
+## Observação
 
 ## Dados de exemplo
 
