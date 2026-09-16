@@ -45,7 +45,7 @@ public class TelaRegistrarReserva extends JFrame {
                 JOptionPane.showMessageDialog(this, "Cadastre um usuário e um livro antes de continuar.");
                 return;
             }
-            ReservaControle.registrarReserva(usuario.getIdUsuario(), livro.getIdLivro(), this, idBibliotecaria);
+            ReservaControle.registrarReserva(usuario, livro, this, idBibliotecaria);
         });
 
         JButton btnVoltar = new JButton("Voltar");

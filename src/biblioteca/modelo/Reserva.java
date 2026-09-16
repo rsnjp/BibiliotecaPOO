@@ -12,15 +12,15 @@ public class Reserva {
     private int idReserva;
     private Date dataReserva;
     private String status;
-    private int idUsuario;
-    private int idLivro;
+    private Usuario usuario;
+    private Livro livro;
 
-    public Reserva(int idReserva, Date dataReserva, String status, int idUsuario, int idLivro) {
+    public Reserva(int idReserva, Date dataReserva, String status, Usuario usuario, Livro livro) {
         this.idReserva = idReserva;
         this.dataReserva = dataReserva;
         this.status = status;
-        this.idUsuario = idUsuario;
-        this.idLivro = idLivro;
+        this.usuario = usuario;
+        this.livro = livro;
     }
 
     public void cancelarReserva() {
@@ -57,31 +57,32 @@ public class Reserva {
         this.status = status;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public int getIdLivro() {
-        return idLivro;
+    public Livro getLivro() {
+        return livro;
     }
 
-    public void setIdLivro(int idLivro) {
-        this.idLivro = idLivro;
+    public void setLivro(Livro livro) {
+        this.livro = livro;
     }
 
     @Override
     public String toString() {
-        return "Reserva #" + idReserva + " - Livro " + idLivro + " - Usuário " + idUsuario + " (" + status + ")";
+        return "Reserva #" + idReserva + " - Livro " + livro.getTitulo() + " - Usuário " + usuario.getNome() + " (" + status + ")";
     }
 
-    // Assim como em Emprestimo, grava apenas o id de usuário/livro.
+    // Assim como em Emprestimo, a composição (usuario/livro completos) vive
+    // em memória; no CSV gravamos apenas os ids, pegos dos próprios objetos.
     // Formato: idReserva;dataReserva;status;idUsuario;idLivro
     public String toCSV() {
         String dtReserva = dataReserva != null ? FORMATO_DATA.format(dataReserva) : "";
-        return idReserva + ";" + dtReserva + ";" + status + ";" + idUsuario + ";" + idLivro;
+        return idReserva + ";" + dtReserva + ";" + status + ";" + usuario.getIdUsuario() + ";" + livro.getIdLivro();
     }
 }

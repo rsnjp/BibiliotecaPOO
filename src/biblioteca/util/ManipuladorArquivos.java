@@ -155,7 +155,14 @@ public class ManipuladorArquivos {
                 int idUsuario = Integer.parseInt(c[5]);
                 int idLivro = Integer.parseInt(c[6]);
 
-                Emprestimo emprestimo = new Emprestimo(idEmprestimo, idUsuario, idLivro,
+                Usuario usuario = buscarUsuarioPorId(idUsuario);
+                Livro livro = buscarLivroPorId(idLivro);
+                if (usuario == null || livro == null) {
+                    System.err.println("Erro ao ler empréstimo: " + Arrays.toString(c));
+                    continue;
+                }
+
+                Emprestimo emprestimo = new Emprestimo(idEmprestimo, usuario, livro,
                         dataEmprestimo, dataDevolucaoPrevista, status);
                 emprestimo.setDataDevolucaoEfetiva(dataDevolucaoEfetiva);
                 lista.add(emprestimo);
@@ -175,7 +182,15 @@ public class ManipuladorArquivos {
                 String status = c[2];
                 int idUsuario = Integer.parseInt(c[3]);
                 int idLivro = Integer.parseInt(c[4]);
-                lista.add(new Reserva(idReserva, dataReserva, status, idUsuario, idLivro));
+
+                Usuario usuario = buscarUsuarioPorId(idUsuario);
+                Livro livro = buscarLivroPorId(idLivro);
+                if (usuario == null || livro == null) {
+                    System.err.println("Erro ao ler reserva: " + Arrays.toString(c));
+                    continue;
+                }
+
+                lista.add(new Reserva(idReserva, dataReserva, status, usuario, livro));
             } catch (Exception e) {
                 System.err.println("Erro ao ler reserva: " + Arrays.toString(c));
             }

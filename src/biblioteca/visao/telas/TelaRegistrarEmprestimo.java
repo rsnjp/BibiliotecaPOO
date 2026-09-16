@@ -45,7 +45,7 @@ public class TelaRegistrarEmprestimo extends JFrame {
                 JOptionPane.showMessageDialog(this, "Cadastre um usuário e um livro antes de continuar.");
                 return;
             }
-            EmprestimoControle.registrarEmprestimo(usuario.getIdUsuario(), livro.getIdLivro(), this, idBibliotecaria);
+            EmprestimoControle.registrarEmprestimo(usuario, livro, this, idBibliotecaria);
         });
 
         JButton btnVoltar = new JButton("Voltar");

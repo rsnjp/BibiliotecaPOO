@@ -28,7 +28,7 @@ public class Usuario {
     public List<Emprestimo> listarEmprestimos() {
         List<Emprestimo> meus = new ArrayList<>();
         for (Emprestimo e : ManipuladorArquivos.lerEmprestimos()) {
-            if (e.getIdUsuario() == idUsuario) {
+            if (e.getUsuario().getIdUsuario() == idUsuario) {
                 meus.add(e);
             }
         }
@@ -38,7 +38,7 @@ public class Usuario {
     public List<Reserva> listarReservas() {
         List<Reserva> minhas = new ArrayList<>();
         for (Reserva r : ManipuladorArquivos.lerReservas()) {
-            if (r.getIdUsuario() == idUsuario) {
+            if (r.getUsuario().getIdUsuario() == idUsuario) {
                 minhas.add(r);
             }
         }
@@ -48,7 +48,7 @@ public class Usuario {
     // Só cancela reservas do próprio usuário.
     public boolean cancelarReserva(int idReserva) {
         for (Reserva r : ManipuladorArquivos.lerReservas()) {
-            if (r.getIdReserva() == idReserva && r.getIdUsuario() == idUsuario) {
+            if (r.getIdReserva() == idReserva && r.getUsuario().getIdUsuario() == idUsuario) {
                 r.cancelarReserva();
                 return true;
             }

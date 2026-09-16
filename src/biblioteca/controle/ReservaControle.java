@@ -10,15 +10,14 @@ import java.util.Date;
 
 public class ReservaControle {
 
-    public static void registrarReserva(int idUsuario, int idLivro, JFrame tela, String idBibliotecaria) {
-        Livro livro = LivroControle.obterLivro(idLivro);
+    public static void registrarReserva(Usuario usuario, Livro livro, JFrame tela, String idBibliotecaria) {
         if (livro == null) {
             JOptionPane.showMessageDialog(tela, "Livro não encontrado.");
             return;
         }
 
         int id = ManipuladorArquivos.proximoId("Reserva");
-        Reserva reserva = new Reserva(id, new Date(), "Ativa", idUsuario, idLivro);
+        Reserva reserva = new Reserva(id, new Date(), "Ativa", usuario, livro);
         BibliotecariaControle.obterBibliotecaria(idBibliotecaria).registrarReserva(reserva);
 
         JOptionPane.showMessageDialog(tela, "Reserva registrada com sucesso!");
