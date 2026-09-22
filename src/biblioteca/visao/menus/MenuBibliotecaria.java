@@ -1,11 +1,13 @@
 package biblioteca.visao.menus;
 
-import biblioteca.visao.telas.TelaCadastroLivro;
-import biblioteca.visao.telas.TelaCadastroUsuario;
+import biblioteca.visao.telas.TelaGerenciarBibliotecarias;
+import biblioteca.visao.telas.TelaGerenciarEmprestimos;
+import biblioteca.visao.telas.TelaGerenciarLivros;
+import biblioteca.visao.telas.TelaGerenciarReservas;
+import biblioteca.visao.telas.TelaGerenciarUsuarios;
 import biblioteca.visao.telas.TelaListarLivros;
 import biblioteca.visao.telas.TelaRegistrarDevolucao;
-import biblioteca.visao.telas.TelaRegistrarEmprestimo;
-import biblioteca.visao.telas.TelaRegistrarReserva;
+import biblioteca.visao.telas.TelaReservasPendentes;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,29 +16,42 @@ public class MenuBibliotecaria extends JFrame {
 
     public MenuBibliotecaria(String idBibliotecaria) {
         setTitle("Menu - Bibliotecária " + idBibliotecaria);
-        setSize(400, 450);
+        setSize(400, 560);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel painel = new JPanel(new GridLayout(7, 1, 10, 10));
+        JPanel painel = new JPanel(new GridLayout(9, 1, 10, 10));
         painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JButton btnCadastrarLivro = new JButton("Cadastrar Livro");
-        btnCadastrarLivro.addActionListener(e -> {
+        // Cadastrar / Editar / Excluir / Listar de cada entidade
+        JButton btnLivros = new JButton("Gerenciar Livros");
+        btnLivros.addActionListener(e -> {
             dispose();
-            new TelaCadastroLivro(idBibliotecaria);
+            new TelaGerenciarLivros(idBibliotecaria);
         });
 
-        JButton btnCadastrarUsuario = new JButton("Cadastrar Usuário");
-        btnCadastrarUsuario.addActionListener(e -> {
+        JButton btnUsuarios = new JButton("Gerenciar Usuários");
+        btnUsuarios.addActionListener(e -> {
             dispose();
-            new TelaCadastroUsuario(idBibliotecaria);
+            new TelaGerenciarUsuarios(idBibliotecaria);
         });
 
-        JButton btnEmprestimo = new JButton("Registrar Empréstimo");
-        btnEmprestimo.addActionListener(e -> {
+        JButton btnBibliotecarias = new JButton("Gerenciar Bibliotecárias");
+        btnBibliotecarias.addActionListener(e -> {
             dispose();
-            new TelaRegistrarEmprestimo(idBibliotecaria);
+            new TelaGerenciarBibliotecarias(idBibliotecaria);
+        });
+
+        JButton btnEmprestimos = new JButton("Gerenciar Empréstimos");
+        btnEmprestimos.addActionListener(e -> {
+            dispose();
+            new TelaGerenciarEmprestimos(idBibliotecaria);
+        });
+
+        JButton btnReservas = new JButton("Gerenciar Reservas");
+        btnReservas.addActionListener(e -> {
+            dispose();
+            new TelaGerenciarReservas(idBibliotecaria);
         });
 
         JButton btnDevolucao = new JButton("Registrar Devolução");
@@ -45,14 +60,14 @@ public class MenuBibliotecaria extends JFrame {
             new TelaRegistrarDevolucao(idBibliotecaria);
         });
 
-        JButton btnReserva = new JButton("Registrar Reserva");
-        btnReserva.addActionListener(e -> {
+        JButton btnPendentes = new JButton("Reservas Pendentes de Empréstimo");
+        btnPendentes.addActionListener(e -> {
             dispose();
-            new TelaRegistrarReserva(idBibliotecaria);
+            new TelaReservasPendentes(idBibliotecaria);
         });
 
-        JButton btnLivros = new JButton("Listar Livros");
-        btnLivros.addActionListener(e -> {
+        JButton btnListarLivros = new JButton("Livros Disponíveis / Com Atraso");
+        btnListarLivros.addActionListener(e -> {
             dispose();
             new TelaListarLivros(idBibliotecaria);
         });
@@ -63,12 +78,14 @@ public class MenuBibliotecaria extends JFrame {
             new MenuInicial();
         });
 
-        painel.add(btnCadastrarLivro);
-        painel.add(btnCadastrarUsuario);
-        painel.add(btnEmprestimo);
-        painel.add(btnDevolucao);
-        painel.add(btnReserva);
         painel.add(btnLivros);
+        painel.add(btnUsuarios);
+        painel.add(btnBibliotecarias);
+        painel.add(btnEmprestimos);
+        painel.add(btnReservas);
+        painel.add(btnDevolucao);
+        painel.add(btnPendentes);
+        painel.add(btnListarLivros);
         painel.add(btnSair);
 
         add(painel);

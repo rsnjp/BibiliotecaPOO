@@ -18,24 +18,37 @@ BibiliotecaPOO/
         │   ├── Emprestimo.java
         │   └── Reserva.java
         ├── util/
-        │   └── ManipuladorArquivos.java   (persistência em .csv)
+        │   ├── ManipuladorArquivos.java   (persistência em .csv)
+        │   └── Datas.java                 (formatação e cálculo de prazos/atrasos)
         ├── controle/                (Controller: valida entradas, liga View ao Model)
         │   ├── LivroControle.java
         │   ├── UsuarioControle.java
         │   ├── BibliotecariaControle.java
         │   ├── EmprestimoControle.java
-        │   └── ReservaControle.java
+        │   ├── ReservaControle.java
+        │   └── Validacoes.java
         └── visao/                   (View: janelas Swing)
             ├── menus/
             │   ├── MenuInicial.java
             │   ├── MenuBibliotecaria.java
             │   └── MenuUsuario.java
             └── telas/
-                ├── TelaCadastroLivro.java
-                ├── TelaCadastroUsuario.java
+                ├── TelaTabela.java                (base: lista em tabela + botões)
+                ├── TelaGerenciar.java             (base do CRUD: Novo/Editar/Excluir)
+                ├── TelaGerenciarLivros.java
+                ├── TelaGerenciarUsuarios.java
+                ├── TelaGerenciarBibliotecarias.java
+                ├── TelaGerenciarEmprestimos.java
+                ├── TelaGerenciarReservas.java
+                ├── TelaCadastroLivro.java         (cadastro e edição)
+                ├── TelaCadastroUsuario.java       (cadastro e edição)
+                ├── TelaCadastroBibliotecaria.java (cadastro e edição)
                 ├── TelaRegistrarEmprestimo.java
+                ├── TelaEditarEmprestimo.java
                 ├── TelaRegistrarDevolucao.java
                 ├── TelaRegistrarReserva.java
+                ├── TelaEditarReserva.java
+                ├── TelaReservasPendentes.java
                 ├── TelaListarLivros.java
                 ├── TelaMeusEmprestimos.java
                 └── TelaMinhasReservas.java
@@ -50,15 +63,40 @@ BibiliotecaPOO/
 - **View** (`visao`): `menus` são as telas de seleção de perfil e de navegação
   principal; `telas` são os formulários de cadastro e as ações específicas.
 - **Controller** (`controle`): recebe os dados digitados na View, valida,
-  monta os objetos do Model (gerando o próximo id via `ManipuladorArquivos.proximoId`)
-  e decide qual tela abrir a seguir.
+  aplica as regras de negócio, monta os objetos do Model (gerando o próximo id via
+  `ManipuladorArquivos.proximoId`) e devolve `true`/`false` para a View decidir
+  qual tela abrir a seguir.
 
 Ao abrir o sistema, o `MenuInicial` pergunta o perfil de acesso:
 
-- **Bibliotecária**: cadastra livros e usuários, registra empréstimos,
-  devoluções e reservas.
+- **Bibliotecária**: cadastra, edita, exclui e lista livros, usuários,
+  bibliotecárias, empréstimos e reservas; registra devoluções; efetiva as
+  reservas pendentes; consulta livros disponíveis e com atraso na entrega.
 - **Usuário**: consulta os livros disponíveis e lista/cancela seus próprios
   empréstimos e reservas.
+
+## Regras de negócio
+
+- **Prazo**: todo empréstimo tem devolução prevista para
+  `Emprestimo.PRAZO_DIAS` (7) dias após a data do empréstimo. Registros antigos
+  sem data prevista têm o prazo calculado a partir da data do empréstimo.
+- **Empréstimo bloqueado** se o livro já está emprestado ou se tem uma reserva
+  ativa de **outro** usuário.
+- **Baixa da reserva**: ao emprestar um livro reservado para o próprio usuário
+  (pela tela de empréstimo ou pelo botão "Efetivar Empréstimo" em Reservas
+  Pendentes), a reserva passa para "Concluída".
+- **Reserva bloqueada** se o livro está emprestado ou já possui reserva ativa.
+  Enquanto reservado, o livro fica com status "Reservado"; cancelar/excluir a
+  reserva o devolve para "Disponível".
+- **Reservas pendentes**: reservas com status "Ativa", ainda aguardando a
+  efetivação do empréstimo.
+- **Devolução**: ao dar baixa no empréstimo, o sistema informa se a devolução
+  está dentro do prazo ou atrasada, e quantos dias de atraso.
+- **Livros com atraso na entrega**: empréstimos ativos cuja data prevista já
+  passou (filtro na tela "Livros Disponíveis / Com Atraso").
+- **Exclusões**: livros e usuários só podem ser excluídos se não tiverem
+  empréstimos/reservas registrados; a bibliotecária logada não pode se excluir;
+  excluir um empréstimo/reserva ativo libera o livro.
 
 ## Como abrir no VS Code
 

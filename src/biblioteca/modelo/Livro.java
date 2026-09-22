@@ -22,8 +22,45 @@ public class Livro {
         ManipuladorArquivos.atualizarObjeto("Livro", idLivro, this, 4);
     }
 
+    public void atualizarDados(String titulo, String autor) {
+        this.titulo = titulo;
+        this.autor = autor;
+        ManipuladorArquivos.atualizarObjeto("Livro", idLivro, this, 4);
+    }
+
     public boolean consultarDisponibilidade() {
         return "Disponível".equalsIgnoreCase(this.status);
+    }
+
+    // Empréstimo ainda não devolvido deste livro (null se não houver).
+    public Emprestimo buscarEmprestimoAtivo() {
+        for (Emprestimo e : ManipuladorArquivos.lerEmprestimos()) {
+            if (e.getLivro().getIdLivro() == idLivro && e.estaAtivo()) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    // Reserva pendente deste livro (null se não houver).
+    public Reserva buscarReservaAtiva() {
+        for (Reserva r : ManipuladorArquivos.lerReservas()) {
+            if (r.getLivro().getIdLivro() == idLivro && r.estaAtiva()) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    // Indica se algum empréstimo ou reserva (de qualquer status) aponta para este livro.
+    public boolean possuiMovimentacoes() {
+        for (Emprestimo e : ManipuladorArquivos.lerEmprestimos()) {
+            if (e.getLivro().getIdLivro() == idLivro) return true;
+        }
+        for (Reserva r : ManipuladorArquivos.lerReservas()) {
+            if (r.getLivro().getIdLivro() == idLivro) return true;
+        }
+        return false;
     }
 
     public int getIdLivro() {

@@ -1,13 +1,11 @@
 package biblioteca.modelo;
 
+import biblioteca.util.Datas;
 import biblioteca.util.ManipuladorArquivos;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Reserva {
-
-    private static final SimpleDateFormat FORMATO_DATA = new SimpleDateFormat("dd/MM/yyyy");
 
     private int idReserva;
     private Date dataReserva;
@@ -23,14 +21,35 @@ public class Reserva {
         this.livro = livro;
     }
 
+    // Cancela a reserva e devolve o livro para o acervo disponível.
     public void cancelarReserva() {
         this.status = "Cancelada";
         ManipuladorArquivos.atualizarObjeto("Reserva", idReserva, this, 5);
+        liberarLivro();
     }
 
+    // "Baixa" da reserva: chamada quando o empréstimo referente a ela é efetuado.
     public void concluirReserva() {
         this.status = "Concluída";
         ManipuladorArquivos.atualizarObjeto("Reserva", idReserva, this, 5);
+    }
+
+    public void atualizarDados(Usuario usuario, Date dataReserva) {
+        this.usuario = usuario;
+        this.dataReserva = dataReserva;
+        ManipuladorArquivos.atualizarObjeto("Reserva", idReserva, this, 5);
+    }
+
+    // Só mexe no livro se ele estiver preso por esta reserva.
+    public void liberarLivro() {
+        if (livro != null && "Reservado".equals(livro.getStatus())) {
+            livro.atualizarStatus("Disponível");
+        }
+    }
+
+    // Reserva ativa = ainda pendente da efetivação do empréstimo.
+    public boolean estaAtiva() {
+        return "Ativa".equals(status);
     }
 
     public int getIdReserva() {
@@ -75,14 +94,14 @@ public class Reserva {
 
     @Override
     public String toString() {
-        return "Reserva #" + idReserva + " - Livro " + livro.getTitulo() + " - Usuário " + usuario.getNome() + " (" + status + ")";
+        return "Reserva #" + idReserva + " - Livro " + livro.getTitulo() + " - Usuário " + usuario.getNome()
+                + " - " + Datas.formatar(dataReserva) + " (" + status + ")";
     }
 
     // Assim como em Emprestimo, a composição (usuario/livro completos) vive
     // em memória; no CSV gravamos apenas os ids, pegos dos próprios objetos.
     // Formato: idReserva;dataReserva;status;idUsuario;idLivro
     public String toCSV() {
-        String dtReserva = dataReserva != null ? FORMATO_DATA.format(dataReserva) : "";
-        return idReserva + ";" + dtReserva + ";" + status + ";" + usuario.getIdUsuario() + ";" + livro.getIdLivro();
+        return idReserva + ";" + Datas.formatar(dataReserva) + ";" + status + ";" + usuario.getIdUsuario() + ";" + livro.getIdLivro();
     }
 }

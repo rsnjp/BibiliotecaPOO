@@ -29,11 +29,18 @@ public class ManipuladorArquivos {
 
         for (int i = 0; i < linhas.size(); i++) {
             if (linhas.get(i)[0].equals(String.valueOf(id))) {
-                linhas.set(i, toCSV(novoObjeto).split(";"));
+                linhas.set(i, toCSV(novoObjeto).split(";", -1));
                 break;
             }
         }
 
+        salvarLista(nomeClasse, linhas);
+    }
+
+    // Remove do arquivo a linha cujo primeiro campo (id) bate com o id informado.
+    public static void excluirObjeto(String nomeClasse, Object id, int camposEsperados) {
+        List<String[]> linhas = ler(nomeClasse, camposEsperados);
+        linhas.removeIf(campos -> campos[0].equals(String.valueOf(id)));
         salvarLista(nomeClasse, linhas);
     }
 
@@ -101,6 +108,19 @@ public class ManipuladorArquivos {
             }
         }
         return maiorId + 1;
+    }
+
+    // Bibliotecárias usam id no formato "B001", "B002"...
+    public static String proximoIdBibliotecaria() {
+        int maiorNumero = 0;
+        for (String[] campos : ler("Bibliotecaria", 3)) {
+            try {
+                maiorNumero = Math.max(maiorNumero, Integer.parseInt(campos[0].replaceAll("\\D", "")));
+            } catch (NumberFormatException ignored) {
+                // id sem parte numérica é ignorado no cálculo
+            }
+        }
+        return String.format("B%03d", maiorNumero + 1);
     }
 
     private static int camposDe(String nomeClasse) {

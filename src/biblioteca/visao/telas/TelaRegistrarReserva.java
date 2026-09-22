@@ -5,7 +5,6 @@ import biblioteca.controle.ReservaControle;
 import biblioteca.controle.UsuarioControle;
 import biblioteca.modelo.Livro;
 import biblioteca.modelo.Usuario;
-import biblioteca.visao.menus.MenuBibliotecaria;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,13 +44,16 @@ public class TelaRegistrarReserva extends JFrame {
                 JOptionPane.showMessageDialog(this, "Cadastre um usuário e um livro antes de continuar.");
                 return;
             }
-            ReservaControle.registrarReserva(usuario, livro, this, idBibliotecaria);
+            if (ReservaControle.registrarReserva(usuario, livro, this, idBibliotecaria)) {
+                dispose();
+                new TelaGerenciarReservas(idBibliotecaria);
+            }
         });
 
         JButton btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> {
             dispose();
-            new MenuBibliotecaria(idBibliotecaria);
+            new TelaGerenciarReservas(idBibliotecaria);
         });
 
         painel.add(btnVoltar);

@@ -12,7 +12,7 @@ public class TelaMeusEmprestimos extends JFrame {
 
     public TelaMeusEmprestimos(int idUsuario) {
         setTitle("Meus Empréstimos");
-        setSize(400, 400);
+        setSize(650, 400);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 

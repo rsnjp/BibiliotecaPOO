@@ -13,7 +13,7 @@ public class TelaMinhasReservas extends JFrame {
 
     public TelaMinhasReservas(int idUsuario) {
         setTitle("Minhas Reservas");
-        setSize(400, 400);
+        setSize(550, 400);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -33,7 +33,10 @@ public class TelaMinhasReservas extends JFrame {
                 JOptionPane.showMessageDialog(this, "Selecione uma reserva.");
                 return;
             }
-            ReservaControle.cancelarReserva(selecionada.getIdReserva(), this, idUsuario);
+            if (ReservaControle.cancelarReserva(selecionada.getIdReserva(), this, idUsuario)) {
+                dispose();
+                new TelaMinhasReservas(idUsuario);
+            }
         });
 
         JButton btnVoltar = new JButton("Voltar");

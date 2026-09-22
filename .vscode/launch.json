@@ -6,6 +6,13 @@
       "name": "Main",
       "request": "launch",
       "mainClass": "biblioteca.Main",
+      "projectName": "BibiliotecaPOO_a8fca4f7"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "biblioteca.Main",
       "projectName": "BibiliotecaPOO_a3154080"
     },
     {

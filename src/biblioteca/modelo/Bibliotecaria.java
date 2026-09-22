@@ -23,19 +23,59 @@ public class Bibliotecaria {
         ManipuladorArquivos.salvarObjeto("Usuario", usuario);
     }
 
+    public void cadastrarBibliotecaria(Bibliotecaria bibliotecaria) {
+        ManipuladorArquivos.salvarObjeto("Bibliotecaria", bibliotecaria);
+    }
+
+    public void atualizarDados(String nome, String turno) {
+        this.nome = nome;
+        this.turno = turno;
+        ManipuladorArquivos.atualizarObjeto("Bibliotecaria", idBibliotecaria, this, 3);
+    }
+
+    // Exclusões
+    public void excluirLivro(Livro livro) {
+        ManipuladorArquivos.excluirObjeto("Livro", livro.getIdLivro(), 4);
+    }
+
+    public void excluirUsuario(Usuario usuario) {
+        ManipuladorArquivos.excluirObjeto("Usuario", usuario.getIdUsuario(), 4);
+    }
+
+    public void excluirBibliotecaria(Bibliotecaria bibliotecaria) {
+        ManipuladorArquivos.excluirObjeto("Bibliotecaria", bibliotecaria.getIdBibliotecaria(), 3);
+    }
+
+    // Excluir um empréstimo ainda ativo devolve o livro para o acervo.
+    public void excluirEmprestimo(Emprestimo emprestimo) {
+        ManipuladorArquivos.excluirObjeto("Emprestimo", emprestimo.getIdEmprestimo(), 7);
+        if (emprestimo.estaAtivo()) {
+            emprestimo.getLivro().atualizarStatus("Disponível");
+        }
+    }
+
+    // Excluir uma reserva ainda ativa libera o livro reservado.
+    public void excluirReserva(Reserva reserva) {
+        ManipuladorArquivos.excluirObjeto("Reserva", reserva.getIdReserva(), 5);
+        if (reserva.estaAtiva()) {
+            reserva.liberarLivro();
+        }
+    }
+
     // Empréstimos
     public void registrarEmprestimo(Emprestimo emprestimo) {
         ManipuladorArquivos.salvarObjeto("Emprestimo", emprestimo);
     }
 
-    public boolean registrarDevolucao(int idEmprestimo) {
+    // Retorna o empréstimo baixado (para a tela informar prazo/atraso) ou null.
+    public Emprestimo registrarDevolucao(int idEmprestimo) {
         for (Emprestimo e : ManipuladorArquivos.lerEmprestimos()) {
-            if (e.getIdEmprestimo() == idEmprestimo) {
+            if (e.getIdEmprestimo() == idEmprestimo && e.estaAtivo()) {
                 e.registrarDevolucao();
-                return true;
+                return e;
             }
         }
-        return false;
+        return null;
     }
 
     // Reservas

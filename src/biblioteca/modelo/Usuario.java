@@ -25,6 +25,16 @@ public class Usuario {
         ManipuladorArquivos.atualizarObjeto("Usuario", idUsuario, this, 4);
     }
 
+    public void atualizarDados(String nome, String telefone, String email) {
+        this.nome = nome;
+        atualizarContato(telefone, email);
+    }
+
+    // Indica se algum empréstimo ou reserva (de qualquer status) aponta para este usuário.
+    public boolean possuiMovimentacoes() {
+        return !listarEmprestimos().isEmpty() || !listarReservas().isEmpty();
+    }
+
     public List<Emprestimo> listarEmprestimos() {
         List<Emprestimo> meus = new ArrayList<>();
         for (Emprestimo e : ManipuladorArquivos.lerEmprestimos()) {
@@ -45,10 +55,10 @@ public class Usuario {
         return minhas;
     }
 
-    // Só cancela reservas do próprio usuário.
+    // Só cancela reservas ativas do próprio usuário.
     public boolean cancelarReserva(int idReserva) {
         for (Reserva r : ManipuladorArquivos.lerReservas()) {
-            if (r.getIdReserva() == idReserva && r.getUsuario().getIdUsuario() == idUsuario) {
+            if (r.getIdReserva() == idReserva && r.getUsuario().getIdUsuario() == idUsuario && r.estaAtiva()) {
                 r.cancelarReserva();
                 return true;
             }
